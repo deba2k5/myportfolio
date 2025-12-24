@@ -1,9 +1,45 @@
 import { motion } from 'framer-motion';
 import { Download, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
 import vintageBg from '@/assets/vintage-bg.png';
 
+const roles = ['Developer', 'Researcher', 'Innovator', 'Problem Solver', 'Tech Enthusiast'];
+
 const HeroSection = () => {
+  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentRole = roles[currentRoleIndex];
+    const typingSpeed = isDeleting ? 50 : 100;
+    const pauseTime = isDeleting ? 200 : 2000;
+
+    if (!isDeleting && displayedText === currentRole) {
+      // Pause before deleting
+      const timeout = setTimeout(() => setIsDeleting(true), pauseTime);
+      return () => clearTimeout(timeout);
+    }
+
+    if (isDeleting && displayedText === '') {
+      // Move to next role
+      setIsDeleting(false);
+      setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      if (isDeleting) {
+        setDisplayedText(currentRole.substring(0, displayedText.length - 1));
+      } else {
+        setDisplayedText(currentRole.substring(0, displayedText.length + 1));
+      }
+    }, typingSpeed);
+
+    return () => clearTimeout(timeout);
+  }, [displayedText, isDeleting, currentRoleIndex]);
+
   const scrollToAbout = () => {
     document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -32,9 +68,9 @@ const HeroSection = () => {
         >
           {/* Greeting */}
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
             className="text-lg md:text-xl text-muted-foreground font-body italic mb-4"
           >
             Welcome to my world
@@ -50,21 +86,31 @@ const HeroSection = () => {
             Your Name Here
           </motion.h1>
 
-          {/* Tagline */}
-          <motion.p
+          {/* Typing Tagline */}
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
-            className="text-xl md:text-2xl text-vintage-brown font-display italic mb-8"
+            className="h-12 md:h-14 flex items-center justify-center mb-8"
           >
-            Developer • Researcher • Innovator
-          </motion.p>
+            <span className="text-xl md:text-2xl text-vintage-brown font-display">
+              I'm a{' '}
+            </span>
+            <span className="text-xl md:text-2xl text-vintage-rust font-display font-semibold ml-2 min-w-[180px] md:min-w-[220px] text-left">
+              {displayedText}
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.5, repeat: Infinity, repeatType: 'reverse' }}
+                className="inline-block w-0.5 h-6 md:h-7 bg-vintage-rust ml-1 align-middle"
+              />
+            </span>
+          </motion.div>
 
           {/* Description */}
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.6 }}
             className="text-base md:text-lg text-muted-foreground font-body max-w-2xl mx-auto mb-12"
           >
             Crafting elegant solutions through code, exploring the frontiers of technology,
@@ -73,22 +119,22 @@ const HeroSection = () => {
 
           {/* CTA Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <Button variant="hero" size="xl" className="group">
-              <Download className="group-hover:animate-bounce" />
-              Download Resume
-            </Button>
-            <Button
-              variant="outline"
-              size="xl"
-              onClick={scrollToAbout}
-            >
-              Explore My Work
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button variant="hero" size="xl" className="group">
+                <Download className="group-hover:animate-bounce" />
+                Download Resume
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button variant="outline" size="xl" onClick={scrollToAbout}>
+                Explore My Work
+              </Button>
+            </motion.div>
           </motion.div>
         </motion.div>
 
@@ -112,17 +158,23 @@ const HeroSection = () => {
 
       {/* Decorative Elements */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.1 }}
-        transition={{ delay: 1 }}
+        initial={{ opacity: 0, rotate: -180 }}
+        animate={{ opacity: 0.15, rotate: 0 }}
+        transition={{ delay: 1, duration: 1.5 }}
         className="absolute top-20 left-10 w-32 h-32 border-2 border-vintage-brown rounded-full"
+      />
+      <motion.div
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 0.15, scale: 1 }}
+        transition={{ delay: 1.2, duration: 1 }}
+        className="absolute bottom-20 right-10 w-24 h-24 border-2 border-vintage-brown"
+        style={{ transform: 'rotate(45deg)' }}
       />
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.1 }}
-        transition={{ delay: 1.2 }}
-        className="absolute bottom-20 right-10 w-24 h-24 border-2 border-vintage-brown"
-        style={{ transform: 'rotate(45deg)' }}
+        transition={{ delay: 1.4, duration: 1 }}
+        className="absolute top-1/3 right-20 w-16 h-16 border border-vintage-rust rounded-full"
       />
     </section>
   );
