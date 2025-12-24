@@ -15,10 +15,9 @@ const galleryImages = [
   { id: 8, title: 'Project Demo Day', category: 'Work' },
 ];
 
-
 const GallerySection = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
   const openLightbox = (index: number) => setSelectedImage(index);
@@ -31,26 +30,14 @@ const GallerySection = () => {
       <div className="container mx-auto">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
           <h2 className="section-title">Photo Gallery</h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.3 }}
-            className="section-subtitle mt-2"
-          >
-            Moments from my journey
-          </motion.p>
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={isInView ? { scaleX: 1 } : {}}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="vintage-divider w-24 mx-auto mt-4 origin-center"
-          />
+          <p className="section-subtitle mt-2">Moments from my journey</p>
+          <div className="vintage-divider w-24 mx-auto mt-4" />
         </motion.div>
 
         {/* Gallery Grid */}
@@ -58,34 +45,24 @@ const GallerySection = () => {
           {galleryImages.map((image, index) => (
             <motion.div
               key={image.id}
-              initial={{ opacity: 0, scale: 0.8, y: 30 }}
-              animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.5, delay: index * 0.05 }}
               onClick={() => openLightbox(index)}
-              whileHover={{ 
-                scale: 1.05, 
-                zIndex: 10,
-                transition: { duration: 0.3 }
-              }}
-              whileTap={{ scale: 0.98 }}
               className="vintage-card-hover cursor-pointer overflow-hidden group"
             >
               <div className="aspect-square bg-gradient-to-br from-vintage-tan to-vintage-cream flex items-center justify-center relative">
                 <span className="text-lg font-display text-vintage-brown/40">{image.id}</span>
-                <motion.div 
-                  className="absolute inset-0 bg-vintage-espresso/0 group-hover:bg-vintage-espresso/60 transition-colors flex items-center justify-center"
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                >
-                  <div className="text-center p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                <div className="absolute inset-0 bg-vintage-espresso/0 group-hover:bg-vintage-espresso/60 transition-colors flex items-center justify-center">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity text-center p-4">
                     <p className="text-vintage-cream font-display font-semibold">{image.title}</p>
                     <span className="text-vintage-cream/70 text-sm font-body">{image.category}</span>
                   </div>
-                </motion.div>
+                </div>
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Lightbox */}
         {selectedImage !== null && (
@@ -114,10 +91,7 @@ const GallerySection = () => {
               <ChevronLeft size={32} />
             </Button>
 
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
+            <div
               className="vintage-card max-w-4xl w-full aspect-video flex items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
@@ -132,7 +106,7 @@ const GallerySection = () => {
                   {galleryImages[selectedImage].category}
                 </span>
               </div>
-            </motion.div>
+            </div>
 
             <Button
               variant="ghost"

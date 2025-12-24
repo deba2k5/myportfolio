@@ -42,36 +42,23 @@ const achievements = [
   },
 ];
 
-
 const AchievementsSection = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
     <section id="achievements" className="section-container" ref={ref}>
       <div className="container mx-auto">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
           <h2 className="section-title">Achievements</h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.3 }}
-            className="section-subtitle mt-2"
-          >
-            Milestones in my journey
-          </motion.p>
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={isInView ? { scaleX: 1 } : {}}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="vintage-divider w-24 mx-auto mt-4 origin-center"
-          />
+          <p className="section-subtitle mt-2">Milestones in my journey</p>
+          <div className="vintage-divider w-24 mx-auto mt-4" />
         </motion.div>
 
         {/* Achievements Grid */}
@@ -79,32 +66,17 @@ const AchievementsSection = () => {
           {achievements.map((achievement, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, scale: 0.8, y: 40 }}
-              animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.12 }}
-              whileHover={{ 
-                scale: 1.05, 
-                y: -10,
-                transition: { duration: 0.3 }
-              }}
-              className="vintage-card-hover p-6 text-center group cursor-default"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="vintage-card-hover p-6 text-center group"
             >
-              <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={isInView ? { scale: 1, rotate: 0 } : {}}
-                transition={{ delay: 0.4 + index * 0.1, type: 'spring', stiffness: 200 }}
-                className="w-16 h-16 rounded-full bg-vintage-gold/20 flex items-center justify-center mx-auto mb-4 group-hover:bg-vintage-gold/30 transition-colors"
-              >
+              <div className="w-16 h-16 rounded-full bg-vintage-gold/20 flex items-center justify-center mx-auto mb-4 group-hover:bg-vintage-gold/30 transition-colors">
                 <achievement.icon className="w-8 h-8 text-vintage-gold" />
-              </motion.div>
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={isInView ? { opacity: 1 } : {}}
-                transition={{ delay: 0.5 + index * 0.1 }}
-                className="text-sm text-vintage-rust font-display font-semibold"
-              >
+              </div>
+              <span className="text-sm text-vintage-rust font-display font-semibold">
                 {achievement.year}
-              </motion.span>
+              </span>
               <h3 className="font-display text-lg font-semibold text-foreground mt-2 mb-2">
                 {achievement.title}
               </h3>
